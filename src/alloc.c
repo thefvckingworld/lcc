@@ -1,10 +1,10 @@
 #include "c.h"
-struct block {
-	struct block *next;
-	char *limit;
-	char *avail;
+struct block { // 每个内存块块头的数据结构声明
+	struct block *next; // 用链表将其串联起来
+	char *limit; // 可分配去的末地址
+	char *avail; // 可分配区的首地址
 };
-union align {
+union align { // 这边的align可以表示系统内最小对齐地址。
 	long l;
 	char *p;
 	double d;
@@ -74,7 +74,7 @@ void *allocate(unsigned long n, unsigned a) {
 			}
 		ap->avail = (char *)((union header *)ap + 1);
 		ap->next = NULL;
-		arena[a] = ap;
+		arena[a] = ap;             // 分配区指向的都是最后一块block
 
 	}
 	ap->avail += n;
